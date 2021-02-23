@@ -23,13 +23,27 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    console.log(req.body)
     TaskService.create(req.body.title,
         req.body.due,
         req.body.category,
         req.body.important)
         .then((task) => {
             console.log('Task created');
+            res.json(task)
+        }).catch((e) => {
+            console.log(e)
+            res.json(e)
+        })
+})
+
+router.patch('/', async (req, res) => {
+    let data = req.body;
+    const id = req.body.id;
+    delete data.id;
+
+    TaskService.update(id, data)
+        .then((task) => {
+            console.log('Task updated');
             res.json(task)
         }).catch((e) => {
             console.log(e)
