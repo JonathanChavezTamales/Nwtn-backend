@@ -1,27 +1,36 @@
 const express = require('express')
 const router = express.Router()
+const HabitService = require('../services/Habit')
 
-const _habits = [
-    {
-        title: 'Correr',
-        icon: 'exercise',
-        completed: [new Date(), new Date()],
-        created: new Date(),
-    },
-    {
-        title: 'Comer una fruta o verdura',
-        icon: 'food',
-        completed: [new Date(), new Date()],
-        created: new Date(),
-    },
-]
-
-router.get('/', (req, res) => {
-    res.json(_habits)
+router.get('/', async (req, res) => {
+    const habits = await HabitService.find()
+    res.json(habits)
 })
 
 router.post('/', (req, res) => {
+    HabitService.create(req.body.title,
+        req.body.icon)
+        .then((habit) => {
+            console.log('Habit created');
+            res.json(habit)
+        }).catch((e) => {
+            console.log(e)
+            res.json(e)
+        })
+})
 
+router.patch('/', (req, res) => {
+    let data = req.body;
+    const id = req.body.id;
+    delete data.id;
+
+    HabitService.update(id, data)
+        .then((habit) => {
+            res.json(habit)
+        }).catch((e) => {
+            console.log(e)
+            res.json(e)
+        })
 })
 
 module.exports = router;

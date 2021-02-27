@@ -43,7 +43,6 @@ router.patch('/', async (req, res) => {
 
     TaskService.update(id, data)
         .then((task) => {
-            console.log('Task updated');
             res.json(task)
         }).catch((e) => {
             console.log(e)
