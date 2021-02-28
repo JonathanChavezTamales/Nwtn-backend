@@ -2,10 +2,10 @@ const TaskModel = require('../models/Task')
 
 class Task {
 
-    static create(title, due, category, important) {
+    static create(title, due, details, category, important) {
         return new Promise((resolve, reject) => {
             const task = new TaskModel({
-                title, due, category, important
+                title, due, details, category, important
             })
             task.save((err) => {
                 if (err) reject(err);
@@ -39,6 +39,15 @@ class Task {
         })
     }
 
+    static delete(id) {
+        return new Promise((resolve, reject) => {
+            TaskModel.findByIdAndDelete(id).then((x) => {
+                resolve(x)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    }
 
 }
 

@@ -22,9 +22,16 @@ router.get('/', async (req, res) => {
     res.json({ today, thisweek, someday })
 })
 
+router.get('/:id', async (req, res) => {
+
+    const task = await TaskService.find({ _id: req.params.id })
+    res.json(task[0])
+})
+
 router.post('/', async (req, res) => {
     TaskService.create(req.body.title,
         req.body.due,
+        req.body.details,
         req.body.category,
         req.body.important)
         .then((task) => {
@@ -36,14 +43,26 @@ router.post('/', async (req, res) => {
         })
 })
 
-router.patch('/', async (req, res) => {
+router.patch('/:id', async (req, res) => {
     let data = req.body;
-    const id = req.body.id;
+    const id = req.params.id;
     delete data.id;
 
     TaskService.update(id, data)
         .then((task) => {
             res.json(task)
+        }).catch((e) => {
+            console.log(e)
+            res.json(e)
+        })
+})
+
+router.delete('/:id', async (req, res) => {
+    const id = req.params.id;
+
+    TaskService.delete(id)
+        .then((task) => {
+            console.log('deleted successfully')
         }).catch((e) => {
             console.log(e)
             res.json(e)
