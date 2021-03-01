@@ -9,6 +9,7 @@ const port = 8000
 // Routes
 const taskRoutes = require('./routes/tasks')
 const habitRoutes = require('./routes/habits')
+const quoteRoutes = require('./routes/quotes')
 
 // Middleware
 app.use(cors())
@@ -23,6 +24,9 @@ app.get('/', (req, res) => {
 app.use('/tasks', taskRoutes)
 
 app.use('/habits', habitRoutes)
+
+app.use('/quotes', quoteRoutes)
+
 
 // Listener
 app.listen(port, () => {

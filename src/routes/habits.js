@@ -19,12 +19,24 @@ router.post('/', (req, res) => {
         })
 })
 
-router.patch('/', (req, res) => {
+router.patch('/:id', (req, res) => {
     let data = req.body;
-    const id = req.body.id;
-    delete data.id;
+    const id = req.params.id;
 
     HabitService.update(id, data)
+        .then((habit) => {
+            res.json(habit)
+        }).catch((e) => {
+            console.log(e)
+            res.json(e)
+        })
+})
+
+router.delete('/:id', (req, res) => {
+    let data = req.body;
+    const id = req.params.id;
+
+    HabitService.delete(id)
         .then((habit) => {
             res.json(habit)
         }).catch((e) => {
