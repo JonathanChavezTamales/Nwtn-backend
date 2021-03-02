@@ -37,6 +37,16 @@ class Habit {
         })
     }
 
+    static delete(id) {
+        return new Promise((resolve, reject) => {
+            HabitModel.findByIdAndDelete(id).then((x) => {
+                resolve(x)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    }
+
 
 }
 

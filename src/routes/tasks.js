@@ -1,25 +1,24 @@
 const express = require('express')
 const router = express.Router()
 const TaskService = require('../services/Task')
+const moment = require('moment')
 
 
 router.get('/', async (req, res) => {
 
-    const _tasks = await TaskService.find()
+
+    const tasks = await TaskService.find()
 
     // Refactor this, do calculations on mongodb query instead
-    let todayMidnight = new Date();
-    todayMidnight.setHours(23, 59, 59, 0);
+    let todayMidnight = moment().endOf('day')
+    let satMidnight = moment().endOf('week')
 
-    let satMidnight = new Date();
-    satMidnight.setDate(satMidnight.getDate() + 6 - satMidnight.getDay());
-    satMidnight.setHours(23, 59, 59, 0);
+    const expired = await TaskService.find({ due: { $lt: todayMidnight } })
+    const today = await TaskService.find({ due: todayMidnight })
+    const thisweek = await TaskService.find({ $and: [{ due: { $gt: todayMidnight, $lt: satMidnight } }] })
+    const someday = await TaskService.find({ due: { $gte: satMidnight } })
 
-    const today = _tasks.filter((task) => task.due < todayMidnight)
-    const thisweek = _tasks.filter((task) => task.due >= todayMidnight && task.due < satMidnight)
-    const someday = _tasks.filter((task) => task.due >= satMidnight)
-
-    res.json({ today, thisweek, someday })
+    res.json({ expired, today, thisweek, someday })
 })
 
 router.get('/:id', async (req, res) => {
@@ -30,7 +29,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     TaskService.create(req.body.title,
-        req.body.due,
+        moment(req.body.due).endOf('day'),
         req.body.details,
         req.body.category,
         req.body.important)
@@ -62,6 +61,7 @@ router.delete('/:id', async (req, res) => {
 
     TaskService.delete(id)
         .then((task) => {
+            res.send(200)
             console.log('deleted successfully')
         }).catch((e) => {
             console.log(e)

@@ -4,6 +4,8 @@ class Task {
 
     static create(title, due, details, category, important) {
         return new Promise((resolve, reject) => {
+            console.log(due)
+            console.log(new Date())
             const task = new TaskModel({
                 title, due, details, category, important
             })

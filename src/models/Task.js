@@ -1,8 +1,9 @@
 const { Schema, model } = require('mongoose')
+const moment = require('moment')
 
 const TaskSchema = new Schema({
     title: { type: String, required: true },
-    due: { type: Date, default: (new Date()).setHours(23, 59, 59, 0) }, // Today midnight
+    due: { type: Date, default: new Date('9999') }, // Far away in the future
     details: { type: String, default: '' },
     important: { type: Boolean, default: false },
     completed: { type: Boolean, default: false },

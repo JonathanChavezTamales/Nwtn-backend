@@ -7,6 +7,11 @@ router.get('/', async (req, res) => {
     res.json(habits)
 })
 
+router.get('/:id', async (req, res) => {
+    const habit = await HabitService.find({ _id: req.params.id })
+    res.json(habit[0])
+})
+
 router.post('/', (req, res) => {
     HabitService.create(req.body.title,
         req.body.icon)
@@ -22,6 +27,7 @@ router.post('/', (req, res) => {
 router.patch('/:id', (req, res) => {
     let data = req.body;
     const id = req.params.id;
+    delete data.id
 
     HabitService.update(id, data)
         .then((habit) => {
@@ -33,12 +39,12 @@ router.patch('/:id', (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
-    let data = req.body;
     const id = req.params.id;
 
     HabitService.delete(id)
         .then((habit) => {
-            res.json(habit)
+            res.send(200)
+            console.log('habit deleted successfully')
         }).catch((e) => {
             console.log(e)
             res.json(e)
