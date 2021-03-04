@@ -4,8 +4,6 @@ class Task {
 
     static create(title, due, details, category, important) {
         return new Promise((resolve, reject) => {
-            console.log(due)
-            console.log(new Date())
             const task = new TaskModel({
                 title, due, details, category, important
             })
@@ -17,12 +15,10 @@ class Task {
     }
 
     static update(id, data) {
-        console.log(id)
-        console.log(data)
+
         return new Promise((resolve, reject) => {
             TaskModel.findByIdAndUpdate(id, data, { new: true })
                 .then((task) => {
-                    console.log(task)
                     resolve(task)
                 }).catch((err) => {
                     reject(err)

@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const moment = require('moment')
 const HabitService = require('../services/Habit')
 
 router.get('/', async (req, res) => {
@@ -29,6 +30,8 @@ router.patch('/:id', (req, res) => {
     const id = req.params.id;
     delete data.id
 
+    console.log('PATCH HABIT')
+
     HabitService.update(id, data)
         .then((habit) => {
             res.json(habit)
@@ -44,7 +47,19 @@ router.delete('/:id', (req, res) => {
     HabitService.delete(id)
         .then((habit) => {
             res.send(200)
-            console.log('habit deleted successfully')
+            console.log('habit deleted')
+        }).catch((e) => {
+            console.log(e)
+            res.json(e)
+        })
+})
+
+router.get('/:id/markcompleted', async (req, res) => {
+    const id = req.params.id;
+
+    HabitService.markCompleteToday(id)
+        .then((habit) => {
+            res.json(habit)
         }).catch((e) => {
             console.log(e)
             res.json(e)

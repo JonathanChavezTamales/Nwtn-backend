@@ -5,6 +5,10 @@ const mongoose = require('mongoose')
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
+// Cronjobs
+require('./cronjobs/streak')
+
+
 const app = express()
 const port = 8000
 

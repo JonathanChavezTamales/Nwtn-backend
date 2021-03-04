@@ -1,5 +1,5 @@
 const HabitModel = require('../models/Habit')
-
+const moment = require('moment')
 class Habit {
 
     static create(title, icon) {
@@ -15,7 +15,6 @@ class Habit {
     }
 
     static update(id, data) {
-        console.log(data)
         return new Promise((resolve, reject) => {
             HabitModel.findByIdAndUpdate(id, data, { new: true })
                 .then((habit) => {
@@ -46,8 +45,6 @@ class Habit {
             })
         })
     }
-
-
 }
 
 module.exports = Habit;

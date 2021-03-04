@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const TaskService = require('../services/Task')
-const moment = require('moment')
+const moment = require('moment-timezone')
 
 
 router.get('/', async (req, res) => {
@@ -10,10 +10,10 @@ router.get('/', async (req, res) => {
     const tasks = await TaskService.find()
 
     // Refactor this, do calculations on mongodb query instead
-    let todayMidnight = moment().endOf('day')
-    let satMidnight = moment().endOf('week')
+    let todayMidnight = moment().endOf('day').tz('America/Mexico_City')
+    let satMidnight = moment().endOf('week').tz('America/Mexico_City')
 
-    const expired = await TaskService.find({ due: { $lt: todayMidnight } })
+    const expired = await TaskService.find({ due: { $lt: todayMidnight }, completed: false })
     const today = await TaskService.find({ due: todayMidnight })
     const thisweek = await TaskService.find({ $and: [{ due: { $gt: todayMidnight, $lt: satMidnight } }] })
     const someday = await TaskService.find({ due: { $gte: satMidnight } })
@@ -28,6 +28,7 @@ router.get('/:id', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
+    console.log(req.body.due)
     TaskService.create(req.body.title,
         moment(req.body.due).endOf('day'),
         req.body.details,
@@ -47,6 +48,9 @@ router.patch('/:id', async (req, res) => {
     const id = req.params.id;
     delete data.id;
 
+    if (data.due) data.due = moment(data.due).endOf('day')
+
+    console.log('PATCH TASK')
     TaskService.update(id, data)
         .then((task) => {
             res.json(task)
