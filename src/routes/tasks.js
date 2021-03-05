@@ -11,18 +11,17 @@ router.get('/', async (req, res) => {
 
     // Refactor this, do calculations on mongodb query instead
     let todayMidnight = moment().endOf('day').tz('America/Mexico_City')
-    let satMidnight = moment().endOf('week').tz('America/Mexico_City')
+    let sunMidnight = moment().endOf('week').add(1, 'day').tz('America/Mexico_City')
 
-    const expired = await TaskService.find({ due: { $lt: todayMidnight }, completed: false })
+    const expired = await TaskService.find({ due: { $lt: todayMidnight }, completed: { $ne: null, $gte: todayMidnight } })
     const today = await TaskService.find({ due: todayMidnight })
-    const thisweek = await TaskService.find({ $and: [{ due: { $gt: todayMidnight, $lt: satMidnight } }] })
-    const someday = await TaskService.find({ due: { $gte: satMidnight } })
+    const thisweek = await TaskService.find({ $and: [{ due: { $gt: todayMidnight, $lte: sunMidnight } }] })
+    const someday = await TaskService.find({ due: { $gt: sunMidnight } })
 
     res.json({ expired, today, thisweek, someday })
 })
 
 router.get('/:id', async (req, res) => {
-
     const task = await TaskService.find({ _id: req.params.id })
     res.json(task[0])
 })

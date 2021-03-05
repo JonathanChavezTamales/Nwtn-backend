@@ -22,6 +22,8 @@ quotes = [
     { quote: 'Happiness consists more in small conveniences or pleasures that occur every day, than in great pieces of good fortune that happen but seldom to a man in the course of his life.', author: 'Benjamin Franklin' },
     { quote: 'Do not set aside your happiness. Do not wait to be happy in the future. The best time to be happy is always now.', author: 'Roy T. Bennett' },
     { quote: 'An early-morning walk is a blessing for the whole day.', author: 'Henry David Thoreau' },
+    { quote: "Your time is limited, so don't waste it living someone else's life.", author: 'Steve Jobs' },
+    { quote: "If today were the last day of my life, would I want to do what I'm about to do today?", author: 'Steve Jobs' }
 ]
 
 router.get('/', async (req, res) => {

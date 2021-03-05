@@ -6,7 +6,7 @@ const TaskSchema = new Schema({
     due: { type: Date, default: new Date('9999') }, // Far away in the future
     details: { type: String, default: '' },
     important: { type: Boolean, default: false },
-    completed: { type: Boolean, default: false },
+    completed: { type: Date, default: null },
     category: { type: String, default: null }
 }, { timestamps: true });
 
