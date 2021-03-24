@@ -10,4 +10,6 @@ const TaskSchema = new Schema({
     category: { type: String, default: null }
 }, { timestamps: true });
 
+TaskSchema.add({ subtasks: [TaskSchema] });
+
 module.exports = model('Task', TaskSchema);

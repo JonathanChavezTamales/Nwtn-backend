@@ -13,12 +13,11 @@ router.get('/', async (req, res) => {
     let todayMidnight = moment().endOf('day').tz('America/Mexico_City')
     let sunMidnight = moment().endOf('week').add(1, 'day').tz('America/Mexico_City')
 
-    const expired = await TaskService.find({ due: { $lt: todayMidnight }, completed: { $ne: null, $gte: todayMidnight } })
-    const today = await TaskService.find({ due: todayMidnight })
+    const today = await TaskService.find({ due: { $lte: todayMidnight }, $or: [{ completed: null }, { completed: { $gte: todayMidnight } }] })
     const thisweek = await TaskService.find({ $and: [{ due: { $gt: todayMidnight, $lte: sunMidnight } }] })
     const someday = await TaskService.find({ due: { $gt: sunMidnight } })
 
-    res.json({ expired, today, thisweek, someday })
+    res.json({ today, thisweek, someday })
 })
 
 router.get('/:id', async (req, res) => {
@@ -26,8 +25,19 @@ router.get('/:id', async (req, res) => {
     res.json(task[0])
 })
 
+router.get('/project/:project', async (req, res) => {
+    let endOfweek = moment().endOf('week').add(1, 'day')
+    let startOfweek = moment().startOf('week').add(1, 'day')
+    const tasks = await TaskService.find({
+        category: req.params.project,
+        $and: [{ due: { $gte: startOfweek, $lte: endOfweek } }]
+    }, { title: 1, completed: 1 }
+    )
+    res.json(tasks)
+})
+
 router.post('/', async (req, res) => {
-    console.log(req.body.due)
+    console.log(req.body.important)
     TaskService.create(req.body.title,
         moment(req.body.due).endOf('day'),
         req.body.details,

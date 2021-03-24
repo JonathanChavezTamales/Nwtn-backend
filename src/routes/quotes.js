@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const gen = require('random-seed')
 const moment = require('moment')
 
 // TODO: Move quotes out of memory
@@ -23,11 +22,32 @@ quotes = [
     { quote: 'Do not set aside your happiness. Do not wait to be happy in the future. The best time to be happy is always now.', author: 'Roy T. Bennett' },
     { quote: 'An early-morning walk is a blessing for the whole day.', author: 'Henry David Thoreau' },
     { quote: "Your time is limited, so don't waste it living someone else's life.", author: 'Steve Jobs' },
-    { quote: "If today were the last day of my life, would I want to do what I'm about to do today?", author: 'Steve Jobs' }
+    { quote: "If today were the last day of my life, would I want to do what I'm about to do today?", author: 'Steve Jobs' },
+    { quote: "The purpose of life is to live it, to taste experience to the utmost, to reach out eagerly and without fear for newer and richer experience.", author: "Eleanor Roosevelt" },
+    { quote: "There is no other life but this.", author: "Henry David Thoreau" },
+    { quote: "Life is a journey, not a destination.", author: "Ralph Waldo Emerson" },
+    { quote: "Real generosity towards the future lies in giving all to the present.", author: "Albert Camus" },
+    { quote: "If you are depressed, you are living in the past, if you are anxious, you are living in the future, if you are at peace, you are living in the present.", author: "Lao Tzu" },
+    { quote: "He who is not courageous enough to take risks will accomplish nothing in life.", author: "Muhammad Ali" },
+    { quote: "If you take no risks, you will suffer no defeats. But if you take no risks, you win no victories.", author: "Richard Nixon" },
+    { quote: "Never was anything great achieved without danger.", author: "Niccolo Machiavelli" },
+    { quote: "Fortune sides with him who dares.", author: "Virgil" },
+    { quote: "He who knows, does not speak. He who speaks, does not know.", author: "Lao Tzu" },
+    {quote:"If anything is worth doing, do it with all your heart.", author:"Buddha"},
+    {quote:"Be where you are; otherwise you will miss your life.", author:"Buddha"},
+    {quote:"It is better to rtavel well than to arrive.", author:"Buddha"},
+    {quote:"The path is made by walking", author:"African proverb"},
+    {quote:"The most difficult thing is the decision to act, the rest is merely tenacity.", author:"Amelia Earhart"},
+    {quote:"No act of kindness, no matter how small, is ever wasted.", author:"Aesop"},
+    {quote:"Let no one ever come to you without leaving happier.", author:"Mother Theresa"},
+    {quote:"Life's most persistent and urgent question is 'What are you doing for others'?", author:"Martin Luther King Jr."},
+    {quote:"Go confidently in the direction of your dreams. Live the life you have imagined." , author:"Henry David Thoreau"},
+    
+
 ]
 
 router.get('/', async (req, res) => {
-    const random = await gen.create(`${moment().dayOfYear()}`)(quotes.length);
+    const random = moment().dayOfYear() % quotes.length;
     res.json(quotes[random])
 })
 

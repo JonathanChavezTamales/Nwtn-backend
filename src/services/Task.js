@@ -31,7 +31,7 @@ class Task {
         fields = fields || {};
 
         return new Promise((resolve, reject) => {
-            TaskModel.find(filter, fields).sort({ important: -1 }).then((tasks) => {
+            TaskModel.find(filter, fields).sort({ important: -1, completed: 'desc', due: 'asc' }).then((tasks) => {
                 resolve(tasks)
             }).catch((e) => { reject(e) })
         })
